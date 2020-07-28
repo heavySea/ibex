@@ -60,7 +60,7 @@ module ibex_cs_registers #(
     input  logic                 nmi_mode_i,
     output logic                 irq_pending_o,          // interrupt request pending
     output ibex_pkg::irqs_t      irqs_o,                 // interrupt requests qualified with mie
-    output logic [31:0]          irqs_x_o,               // custom interrupt requests qualified with miex
+    output logic [31:0]          irqs_x_o,               // custom interrupt requests 
     output logic                 csr_mstatus_mie_o,
     output logic [31:0]          csr_mepc_o,
 
@@ -187,7 +187,6 @@ module ibex_cs_registers #(
   logic [31:0] dscratch1_q, dscratch1_d;
 
   // CLINTx
-  logic [31:0] miex_q, miex_d;
   logic [31:0] mipx;
   logic [31:0] mtvecx_q, mtvecx_d;
 
@@ -432,7 +431,6 @@ module ibex_cs_registers #(
       end
 
       // CLINTx
-      CSR_MIEX:   csr_rdata_int = miex_q;
       CSR_MIPX:   csr_rdata_int = mipx;
       CSR_MTVECX: csr_rdata_int = mtvecx_q;
 
@@ -467,7 +465,6 @@ module ibex_cs_registers #(
     mhpmcounter_we   = '0;
     mhpmcounterh_we  = '0;
 
-    miex_d       = miex_q;
     mtvecx_d     = csr_mtvec_init_i ? {boot_addr_i[31:8], 6'b0, 2'b01} : mtvecx_q;
 
     if (csr_we_int) begin
@@ -565,9 +562,6 @@ module ibex_cs_registers #(
         CSR_MHPMCOUNTER28H, CSR_MHPMCOUNTER29H, CSR_MHPMCOUNTER30H, CSR_MHPMCOUNTER31H: begin
           mhpmcounterh_we[mhpmcounter_idx] = 1'b1;
         end
-
-        // CLINTx
-        CSR_MIEX: miex_d = csr_wdata_int;
 
         // mtvecx
         // mtvecx.MODE set to vectored
@@ -683,11 +677,7 @@ module ibex_cs_registers #(
   // Qualify incoming interrupt requests in mip CSR with mie CSR for controller and to re-enable
   // clock upon WFI (must be purely combinational).
   assign irqs_o        = mip & mie_q;
-  assign irq_pending_o = (|irqs_o) | (|irqs_x_o);
-
-  // Qualify incoming interrupt requests in mipx CSR with miex CSR for controller and to re-enable
-  // clock upon WFI (must be purely combinational).
-  assign irqs_x_o      = mipx & miex_q;
+  assign irq_pending_o = (|irqs_o) | (|mipx);
 
   // directly output mtvecx to IF stage
   assign csr_mtvecx_o = mtvecx_q;
@@ -726,7 +716,6 @@ module ibex_cs_registers #(
       mstack_epc_q   <= '0;
       mstack_cause_q <= '0;
 
-      miex_q         <= '0;
       mtvecx_q       <= 32'b01;
 
     end else begin
@@ -747,8 +736,7 @@ module ibex_cs_registers #(
       mstack_q       <= mstack_d;
       mstack_epc_q   <= mstack_epc_d;
       mstack_cause_q <= mstack_cause_d;
-
-      miex_q         <= miex_d;
+      
       mtvecx_q       <= mtvecx_d;
     end
   end
