@@ -230,7 +230,44 @@ typedef enum logic [5:0] {
   EXC_CAUSE_LOAD_ACCESS_FAULT  = {1'b0, 5'd05},
   EXC_CAUSE_STORE_ACCESS_FAULT = {1'b0, 5'd07},
   EXC_CAUSE_ECALL_UMODE        = {1'b0, 5'd08},
-  EXC_CAUSE_ECALL_MMODE        = {1'b0, 5'd11}
+  EXC_CAUSE_ECALL_MMODE        = {1'b0, 5'd11},
+  
+  //For Clintx Support decode all other Interrupt IDs
+  // Not really needed, but better to understand while debugging
+
+  EXC_CAUSE_IRQ_X_0            = {1'b1, 5'd00}, 
+  EXC_CAUSE_IRQ_X_1            = {1'b1, 5'd01},
+  EXC_CAUSE_IRQ_X_2            = {1'b1, 5'd02},
+  //EXC_CAUSE_IRQ_X_3            = {1'b1, 5'd03}, // decoded as EXC_CAUSE_IRQ_SOFTWARE_M
+  EXC_CAUSE_IRQ_X_4            = {1'b1, 5'd04},
+  EXC_CAUSE_IRQ_X_5            = {1'b1, 5'd05},
+  EXC_CAUSE_IRQ_X_6            = {1'b1, 5'd06},
+  //EXC_CAUSE_IRQ_X_7            = {1'b1, 5'd07}, // decoded as EXC_CAUSE_IRQ_TIMER_M
+  EXC_CAUSE_IRQ_X_8            = {1'b1, 5'd08},
+  EXC_CAUSE_IRQ_X_9            = {1'b1, 5'd09},
+  EXC_CAUSE_IRQ_X_10           = {1'b1, 5'd10},
+  //EXC_CAUSE_IRQ_X_11           = {1'b1, 5'd011},// decoded as EXC_CAUSE_IRQ_EXTERNAL_M
+  EXC_CAUSE_IRQ_X_12           = {1'b1, 5'd12},
+  EXC_CAUSE_IRQ_X_13           = {1'b1, 5'd13},
+  EXC_CAUSE_IRQ_X_14           = {1'b1, 5'd14},
+  EXC_CAUSE_IRQ_X_15           = {1'b1, 5'd15},
+  EXC_CAUSE_IRQ_X_16           = {1'b1, 5'd16},
+  EXC_CAUSE_IRQ_X_17           = {1'b1, 5'd17},
+  EXC_CAUSE_IRQ_X_18           = {1'b1, 5'd18},
+  EXC_CAUSE_IRQ_X_19           = {1'b1, 5'd19},
+  EXC_CAUSE_IRQ_X_20           = {1'b1, 5'd20},
+  EXC_CAUSE_IRQ_X_21           = {1'b1, 5'd21},
+  EXC_CAUSE_IRQ_X_22           = {1'b1, 5'd22},
+  EXC_CAUSE_IRQ_X_23           = {1'b1, 5'd23},
+  EXC_CAUSE_IRQ_X_24           = {1'b1, 5'd24},
+  EXC_CAUSE_IRQ_X_25           = {1'b1, 5'd25},
+  EXC_CAUSE_IRQ_X_26           = {1'b1, 5'd26},
+  EXC_CAUSE_IRQ_X_27           = {1'b1, 5'd27},
+  EXC_CAUSE_IRQ_X_28           = {1'b1, 5'd28},
+  EXC_CAUSE_IRQ_X_29           = {1'b1, 5'd29},
+  EXC_CAUSE_IRQ_X_30           = {1'b1, 5'd30}
+  //EXC_CAUSE_IRQ_X_31           = {1'b1, 5'd031} // decoded as EXC_CAUSE_IRQ_NM
+  
 } exc_cause_e;
 
 // Debug cause

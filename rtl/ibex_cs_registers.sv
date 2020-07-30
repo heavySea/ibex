@@ -726,7 +726,7 @@ module ibex_cs_registers #(
       mstack_epc_q   <= '0;
       mstack_cause_q <= '0;
 
-      miex_q         <= '0;
+      miex_q         <= '1;
       mtvecx_q       <= 32'b01;
 
     end else begin
