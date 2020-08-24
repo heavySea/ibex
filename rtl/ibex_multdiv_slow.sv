@@ -312,8 +312,10 @@ module ibex_multdiv_slow
                     operator_i == MD_OP_MULH));
 
   // State must be valid.
+  `ifndef SYNTHESIS
   `ASSERT(IbexMultDivStateValid, md_state_q inside {
       MD_IDLE, MD_ABS_A, MD_ABS_B, MD_COMP, MD_LAST, MD_CHANGE_SIGN, MD_FINISH
       }, clk_i, !rst_ni)
+  `endif
 
 endmodule // ibex_mult

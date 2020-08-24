@@ -510,6 +510,8 @@ module ibex_load_store_unit
   assign unused_instr_valid_id  = instr_valid_id_i;
   assign unused_illegal_insn_id = illegal_insn_id_i;
 
+  `ifndef SYNTHESIS
+
   // Selectors must be known/valid.
   `ASSERT(IbexDataTypeKnown, (instr_valid_id_i & ~illegal_insn_id_i) |-> !$isunknown(lsu_type_i))
   `ASSERT(IbexDataOffsetKnown, (instr_valid_id_i & ~illegal_insn_id_i) |-> !$isunknown(data_offset))
@@ -527,5 +529,7 @@ module ibex_load_store_unit
 
   // Address must be word aligned when request is sent.
   `ASSERT(IbexDataAddrUnaligned, data_req_o |-> (data_addr_o[1:0] == 2'b00))
+
+  `endif
 
 endmodule

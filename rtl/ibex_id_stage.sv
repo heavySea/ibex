@@ -668,7 +668,9 @@ module ibex_id_stage #(
   // Holding branch_set/jump_set high for more than one cycle may not cause a functional issue but
   // could generate needless prefetch buffer flushes and instruction fetches. ID/EX is designed such
   // that this shouldn't ever happen.
+ `ifndef SYNTHESIS
   `ASSERT(NeverDoubleBranch, branch_set |=> ~branch_set)
+ `endif
 
   ///////////////
   // ID-EX FSM //
@@ -775,7 +777,9 @@ module ibex_id_stage #(
   // Note for the two-stage configuration ready_wb_i is always set
   assign multdiv_ready_id_o = ready_wb_i;
 
+  `ifndef SYNTHESIS
   `ASSERT(StallIDIfMulticycle, (id_fsm_q == FIRST_CYCLE) & (id_fsm_d == MULTI_CYCLE) |-> stall_id)
+  `endif
 
   // Stall ID/EX stage for reason that relates to instruction in ID/EX
   assign stall_id = stall_ld_hz | stall_mem | stall_multdiv | stall_jump | stall_branch |
@@ -858,9 +862,10 @@ module ibex_id_stage #(
                              ~instr_kill                &
                              ~stall_ld_hz               &
                              ~outstanding_memory_access;
-
+  `ifndef SYNTHESIS
     `ASSERT(IbexStallIfValidInstrNotExecuting,
       instr_valid_i & ~instr_kill & ~instr_executing |-> stall_id)
+  `endif
 
     // Stall for reasons related to memory:
     // * Requested by LSU (load/store in ID/EX needs to be held in ID/EX whilst a data request or
@@ -912,8 +917,10 @@ module ibex_id_stage #(
     // Without writeback stage any valid instruction that hasn't seen an error will execute
     assign instr_executing = instr_valid_i & ~instr_fetch_err_i & controller_run;
 
+  `ifndef SYNTHESIS
     `ASSERT(IbexStallIfValidInstrNotExecuting,
       instr_valid_i & ~instr_fetch_err_i & ~instr_executing & controller_run |-> stall_id)
+  `endif
 
     // No data forwarding without writeback stage so always take source register data direct from
     // register file
@@ -961,7 +968,7 @@ module ibex_id_stage #(
   ////////////////
   // Assertions //
   ////////////////
-
+  `ifndef SYNTHESIS
   // Selectors must be known/valid.
   `ASSERT_KNOWN_IF(IbexAluOpMuxSelKnown, alu_op_a_mux_sel, instr_valid_i)
   `ASSERT(IbexAluAOpMuxSelValid, instr_valid_i |-> alu_op_a_mux_sel inside {
@@ -1023,6 +1030,7 @@ module ibex_id_stage #(
 
   `ifdef CHECK_MISALIGNED
   `ASSERT(IbexMisalignedMemoryAccess, !lsu_addr_incr_req_i)
+  `endif
   `endif
 
 endmodule

@@ -988,8 +988,9 @@ module ibex_decoder #(
   ////////////////
   // Assertions //
   ////////////////
-
+  `ifndef SYNTHESIS
   // Selectors must be known/valid.
   `ASSERT(IbexRegImmAluOpKnown, (opcode == OPCODE_OP_IMM) |->
       !$isunknown(instr[14:12]))
+  `endif
 endmodule // controller

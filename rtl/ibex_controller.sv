@@ -216,12 +216,14 @@ module ibex_controller #(
 
   // special request that can specifically occur during branch instructions
   assign special_req_branch = instr_fetch_err & (ctrl_fsm_cs != FLUSH);
-
+	
+	`ifndef SYNTHESIS
   `ASSERT(SpecialReqBranchGivesSpecialReqAll,
     special_req_branch |-> special_req_all)
 
   `ASSERT(SpecialReqAllGivesSpecialReqBranchIfBranchInst,
     special_req_all && (branch_set_i || jump_set_i) |-> special_req_branch)
+	`endif
 
   if (WritebackStage) begin
     // Instruction in writeback is generating an exception so instruction in ID must not execute
@@ -764,10 +766,11 @@ module ibex_controller #(
   ////////////////
   // Assertions //
   ////////////////
-
+	`ifndef SYNTHESIS
   // Selectors must be known/valid.
   `ASSERT(IbexCtrlStateValid, ctrl_fsm_cs inside {
       RESET, BOOT_SET, WAIT_SLEEP, SLEEP, FIRST_FETCH, DECODE, FLUSH,
       IRQ_TAKEN, DBG_TAKEN_IF, DBG_TAKEN_ID})
+	`endif
 
 endmodule

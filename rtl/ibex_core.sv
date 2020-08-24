@@ -768,6 +768,7 @@ module ibex_core #(
       (outstanding_store_id & load_store_unit_i.split_misaligned_access);
 
     // When writing back the result of a load, the load must have made it to writeback
+
     `ASSERT(NoMemRFWriteWithoutPendingLoad, rf_we_lsu |-> outstanding_load_wb, clk_i, !rst_ni)
   end else begin
     // Without writeback stage only look into whether load or store is in ID to determine if
@@ -900,6 +901,7 @@ module ibex_core #(
   );
 
   // These assertions are in top-level as instr_valid_id required as the enable term
+  `ifndef SYNTHESIS 
   `ASSERT(IbexCsrOpValid, instr_valid_id |-> csr_op inside {
       CSR_OP_READ,
       CSR_OP_WRITE,
@@ -907,7 +909,7 @@ module ibex_core #(
       CSR_OP_CLEAR
       })
   `ASSERT_KNOWN_IF(IbexCsrWdataIntKnown, cs_registers_i.csr_wdata_int, csr_access & instr_valid_id)
-
+  `endif
   if (PMPEnable) begin : g_pmp
     logic [33:0] pmp_req_addr [PMP_NUM_CHAN];
     pmp_req_e    pmp_req_type [PMP_NUM_CHAN];

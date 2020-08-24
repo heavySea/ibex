@@ -1144,7 +1144,8 @@ module ibex_cs_registers #(
   ////////////////
   // Assertions //
   ////////////////
-
+  `ifndef SYNTHESIS
   `ASSERT(IbexCsrOpEnRequiresAccess, csr_op_en_i |-> csr_access_i)
+  `endif
 
 endmodule

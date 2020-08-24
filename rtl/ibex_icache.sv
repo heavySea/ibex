@@ -987,11 +987,11 @@ module ibex_icache #(
   ////////////////
   // Assertions //
   ////////////////
-
+  `ifndef SYNTHESIS
   `ASSERT_INIT(size_param_legal, (LineSize > 32))
 
   // ECC primitives will need to be changed for different sizes
   `ASSERT_INIT(ecc_tag_param_legal, (TAG_SIZE <= 27))
   `ASSERT_INIT(ecc_data_param_legal, (LineSize <= 121))
-
+  `endif
 endmodule

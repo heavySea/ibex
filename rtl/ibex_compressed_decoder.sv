@@ -281,7 +281,7 @@ module ibex_compressed_decoder (
   ////////////////
   // Assertions //
   ////////////////
-
+	`ifndef SYNTHESIS
   // Selectors must be known/valid.
   `ASSERT(IbexInstrLSBsKnown, valid_i |->
       !$isunknown(instr_i[1:0]))
@@ -296,5 +296,5 @@ module ibex_compressed_decoder (
       !$isunknown({instr_i[12], instr_i[6:5]}))
   `ASSERT(IbexC2Known1, (valid_i && (instr_i[1:0] == 2'b10)) |->
       !$isunknown(instr_i[15:13]))
-
+  `endif
 endmodule
