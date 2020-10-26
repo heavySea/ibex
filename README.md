@@ -2,6 +2,16 @@
 
 # Ibex RISC-V Core
 
+## STELLissimo ASIC synthesis branch
+
+This is the ibex version to use for the ASIC synthesis of the STELLissimo.
+Minor changes have been made, otherwise it is the same as the origin/PULPissimo branch.
+
+
+
+
+
+
 Ibex is a small and efficient, 32-bit, in-order RISC-V core with a 2-stage pipeline that implements
 the RV32IMC instruction set architecture.
 
